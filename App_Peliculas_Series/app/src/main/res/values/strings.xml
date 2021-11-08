@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">App_Peliculas_Series</string>
+    <string name="ws_error">Error en el servicio</string>
+    <string name="ws_error_two">Errror</string>
+    <string name="ws_wait">Espere un momento, por favor</string>
+    <string name="iniciar_sesion">Iniciar Sesion</string>
+    <string name="ver_lista_de_peliculas_y_series">Ver lista de peliculas y series</string>
+</resources>
