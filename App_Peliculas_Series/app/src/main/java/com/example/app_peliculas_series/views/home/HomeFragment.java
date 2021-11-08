@@ -18,6 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.app_peliculas_series.adapters.PeliculasSeriesAdapter;
 import com.example.app_peliculas_series.adapters.PeliculasSeriesPersonalizadoAdapter;
+import com.example.app_peliculas_series.database.MoviesDataBase;
+import com.example.app_peliculas_series.database.dao.MoviesDao;
+import com.example.app_peliculas_series.database.entity.MovieEntity;
+import com.example.app_peliculas_series.database.repository.MovieRepository;
+import com.example.app_peliculas_series.database.repository.MovieRepositoryImpl;
 import com.example.app_peliculas_series.databinding.FragmentHomeBinding;
 import com.example.app_peliculas_series.model.PeliculasBean;
 import com.example.app_peliculas_series.presenter.ViewFilmsPresenter;
@@ -29,6 +34,7 @@ import com.example.app_peliculas_series.server.json.requesttoken.RequestTokenRes
 import com.example.app_peliculas_series.utils.SingletonPrefs;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment implements AccessTokenListener, PeliculasSeriesAdapter.OnItemClickListener {
 
@@ -40,6 +46,10 @@ public class HomeFragment extends Fragment implements AccessTokenListener, Pelic
     ArrayList<PeliculasBean> listMovie;
     protected RecyclerView recyclerViewMovie;
     private PeliculasBean peliculasBean;
+    private MoviesDataBase db;
+    private MoviesDao dao;
+    MovieEntity movieEntity;
+    MovieRepository repository;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -66,10 +76,17 @@ public class HomeFragment extends Fragment implements AccessTokenListener, Pelic
         textView = binding.tvList;
         listMovie = new ArrayList<>();
         peliculasBean = new PeliculasBean();
+        db = MoviesDataBase.getInstance(getContext());
+        dao = db.moviesDao();
+        repository = new MovieRepositoryImpl(dao);
+        movieEntity = new MovieEntity();
         recyclerViewMovie = binding.recyclerMovie;
         recyclerViewMovie.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 //        recyclerViewMovie.setLayoutManager(new GridLayoutManager(getContext(), 2));
         viewFilmsPresenter.sendGetListMovie();
+
+        llenarPelculas(peliculasBean);
+
 
     }
 
@@ -78,9 +95,15 @@ public class HomeFragment extends Fragment implements AccessTokenListener, Pelic
     }
 
     private void llenarPelculas(PeliculasBean peliBean) {
-
+        List<MovieEntity> movieEntityList = repository.getAllMovies();
+        for (MovieEntity movieEntity : movieEntityList) {
+            peliculasBean.setTitulo(movieEntity.getTitle());
+            peliculasBean.setDescripcion(movieEntity.getDescripcion());
+            peliculasBean.setPoster(movieEntity.getImagen());
             listMovie.add(new PeliculasBean(peliBean.getTitulo(), peliBean.getDescripcion(), peliBean.getPoster()));
-
+            PeliculasSeriesPersonalizadoAdapter adapter = new PeliculasSeriesPersonalizadoAdapter(listMovie);
+            recyclerViewMovie.setAdapter(adapter);
+        }
     }
 
     @Override
@@ -110,14 +133,12 @@ public class HomeFragment extends Fragment implements AccessTokenListener, Pelic
         singletonPrefs.getListResponse = requestTokenResponse;
 
         for (ListFilms listFilms : requestTokenResponse.results) {
-            peliculasBean.setTitulo(listFilms.title);
-            peliculasBean.setDescripcion(listFilms.overview);
-            peliculasBean.setPoster(listFilms.posterPath);
-            llenarPelculas( peliculasBean);
+            movieEntity.setTitle(listFilms.title);
+            movieEntity.setDescripcion(listFilms.overview);
+            movieEntity.setImagen(listFilms.posterPath);
+            repository.insertMovie(movieEntity);
         }
 
-        PeliculasSeriesPersonalizadoAdapter adapter = new PeliculasSeriesPersonalizadoAdapter(listMovie);
-        recyclerViewMovie.setAdapter(adapter);
 
     }
 

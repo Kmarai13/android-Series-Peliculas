@@ -6,11 +6,15 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.example.app_peliculas_series.R;
+import com.example.app_peliculas_series.database.MoviesDataBase;
+import com.example.app_peliculas_series.database.dao.MoviesDao;
+import com.example.app_peliculas_series.database.entity.MovieEntity;
+import com.example.app_peliculas_series.database.repository.MovieRepository;
+import com.example.app_peliculas_series.database.repository.MovieRepositoryImpl;
 import com.example.app_peliculas_series.presenter.callbacks.AccessTokenListener;
 import com.example.app_peliculas_series.server.WebServices;
 import com.example.app_peliculas_series.server.json.accesstoken.AccessTokenRequest;
 import com.example.app_peliculas_series.server.json.accesstoken.AccessTokentResponse;
-import com.example.app_peliculas_series.server.json.getlist.GetListRequest;
 import com.example.app_peliculas_series.server.json.getlist.GetListResponse;
 import com.example.app_peliculas_series.server.json.requesttoken.RequestTokenRequest;
 import com.example.app_peliculas_series.server.json.requesttoken.RequestTokenResponse;
@@ -26,13 +30,15 @@ public class ViewFilmsPresenter {
     private AccessTokenListener accessTokenListener;
     private ProgressDialog mProgressDialog;
     private String wsConsulted;
-    private SingletonPrefs singletonPrefs = SingletonPrefs.getInstance();
+    private SingletonPrefs singletonPrefs;
 
 
     public ViewFilmsPresenter(Context ctx,
                               AccessTokenListener accessTokenListener) {
         this.ctx = ctx;
         this.accessTokenListener = accessTokenListener;
+        singletonPrefs = SingletonPrefs.getInstance();
+
     }
 
     public void sendTokenAcccess() {
@@ -111,7 +117,7 @@ public class ViewFilmsPresenter {
         sendGetList();
     }
 
-        private void sendGetList() {
+    private void sendGetList() {
         Call<GetListResponse> mFolioCall = WebServices.services().getList(singletonPrefs.accessTokentResponse.account_id);
         mFolioCall.enqueue(new Callback<GetListResponse>() {
             @Override
@@ -119,7 +125,7 @@ public class ViewFilmsPresenter {
                                    @NonNull Response<GetListResponse> response) {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
-                            accessTokenListener.onSuccessGetList(response.body());
+                        accessTokenListener.onSuccessGetList(response.body());
 //            quitWaitDialog();
                     } else {
                         sendError(wsConsulted);
@@ -159,7 +165,6 @@ public class ViewFilmsPresenter {
             }
         });
     }
-
 
 
     private void sendError(String wsConsulted) {
