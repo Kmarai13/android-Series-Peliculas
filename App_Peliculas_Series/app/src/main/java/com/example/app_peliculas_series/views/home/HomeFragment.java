@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,16 +13,21 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.app_peliculas_series.R;
 import com.example.app_peliculas_series.adapters.PeliculasSeriesAdapter;
+import com.example.app_peliculas_series.adapters.PeliculasSeriesPersonalizadoAdapter;
 import com.example.app_peliculas_series.databinding.FragmentHomeBinding;
+import com.example.app_peliculas_series.model.PeliculasBean;
 import com.example.app_peliculas_series.presenter.ViewFilmsPresenter;
 import com.example.app_peliculas_series.presenter.callbacks.AccessTokenListener;
 import com.example.app_peliculas_series.server.json.accesstoken.AccessTokentResponse;
 import com.example.app_peliculas_series.server.json.getlist.GetListResponse;
 import com.example.app_peliculas_series.server.json.requesttoken.RequestTokenResponse;
 import com.example.app_peliculas_series.utils.SingletonPrefs;
+
+import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements AccessTokenListener, PeliculasSeriesAdapter.OnItemClickListener {
 
@@ -32,6 +36,9 @@ public class HomeFragment extends Fragment implements AccessTokenListener, Pelic
     private ViewFilmsPresenter viewFilmsPresenter;
     protected TextView textView;
     private SingletonPrefs singletonPrefs;
+    ArrayList<PeliculasBean> listMovie;
+    protected RecyclerView recyclerViewMovie;
+    private PeliculasBean peliculasBean;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -56,13 +63,21 @@ public class HomeFragment extends Fragment implements AccessTokenListener, Pelic
 
     private void initView() {
         textView = binding.tvList;
-
+        listMovie = new ArrayList<>();
+        peliculasBean = new PeliculasBean();
+        recyclerViewMovie = binding.recyclerMovie;
+        recyclerViewMovie.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+//        recyclerViewMovie.setLayoutManager(new GridLayoutManager(getContext(), 2));
         viewFilmsPresenter.sendGetListMovie();
-        
+
     }
 
     protected ViewFilmsPresenter getPresenter() {
         return viewFilmsPresenter = new ViewFilmsPresenter(getContext(), this);
+    }
+
+    private void  llenarPelculas(){
+        listMovie.add(new PeliculasBean(peliculasBean.getTitulo(),peliculasBean.getDescripcion(),peliculasBean.getPoster()));
     }
 
     @Override
@@ -81,7 +96,7 @@ public class HomeFragment extends Fragment implements AccessTokenListener, Pelic
     @Override
     public void onSuccessRequestToken(RequestTokenResponse requestTokenResponse) {
         singletonPrefs.requestTokenResponse = requestTokenResponse;
-        String url = "https://www.themoviedb.org/auth/access?request_token="+ requestTokenResponse.request_token;
+        String url = "https://www.themoviedb.org/auth/access?request_token=" + requestTokenResponse.request_token;
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
         startActivity(i);
@@ -89,7 +104,16 @@ public class HomeFragment extends Fragment implements AccessTokenListener, Pelic
 
     @Override
     public void onSuccessGetList(GetListResponse requestTokenResponse) {
-        textView.setText(String.valueOf(requestTokenResponse.total_results));
+        singletonPrefs.getListResponse = requestTokenResponse;
+
+        peliculasBean.setTitulo(requestTokenResponse.title);
+        peliculasBean.setDescripcion(requestTokenResponse.overview);
+        peliculasBean.setPoster(requestTokenResponse.posterPath);
+
+        llenarPelculas();
+        PeliculasSeriesPersonalizadoAdapter adapter = new PeliculasSeriesPersonalizadoAdapter(listMovie);
+        recyclerViewMovie.setAdapter(adapter);
+
     }
 
     @Override

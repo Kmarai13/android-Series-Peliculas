@@ -1,5 +1,6 @@
 package com.example.app_peliculas_series.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,16 +9,19 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.app_peliculas_series.R;
+import com.example.app_peliculas_series.model.PeliculasBean;
 
 import java.util.ArrayList;
 
-public class PeliculasSeriesAdapter extends RecyclerView.Adapter<PeliculasSeriesAdapter.ViewHolder> {
+public class PeliculasSeriesPersonalizadoAdapter extends RecyclerView.Adapter<PeliculasSeriesPersonalizadoAdapter.ViewHolder> {
 
     private String[] localDataSet;
-    ArrayList<String> listMovie;
+    ArrayList<PeliculasBean> listMovie;
+    private Context context;
 
-    public PeliculasSeriesAdapter(ArrayList<String> listMovie) {
+    public PeliculasSeriesPersonalizadoAdapter(ArrayList<PeliculasBean> listMovie) {
         this.listMovie = listMovie;
     }
 
@@ -30,9 +34,9 @@ public class PeliculasSeriesAdapter extends RecyclerView.Adapter<PeliculasSeries
      * (custom ViewHolder).
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView tvTitulo;
-        private final ImageView ivPelicula;
-        private final TextView tvDescripcion;
+        TextView tvTitulo;
+        public ImageView ivPelicula;
+        TextView tvDescripcion;
 
         public ViewHolder(View view) {
             super(view);
@@ -57,7 +61,7 @@ public class PeliculasSeriesAdapter extends RecyclerView.Adapter<PeliculasSeries
      * @param dataSet String[] containing the data to populate views to be used
      *                by RecyclerView.
      */
-    public PeliculasSeriesAdapter(String[] dataSet) {
+    public PeliculasSeriesPersonalizadoAdapter(String[] dataSet) {
         localDataSet = dataSet;
     }
 
@@ -68,6 +72,8 @@ public class PeliculasSeriesAdapter extends RecyclerView.Adapter<PeliculasSeries
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.content_item, viewGroup, false);
 
+        context = viewGroup.getContext();
+
         return new ViewHolder(view);
     }
 
@@ -77,7 +83,11 @@ public class PeliculasSeriesAdapter extends RecyclerView.Adapter<PeliculasSeries
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.asignarMovie(listMovie.get(position));
+        viewHolder.tvTitulo.setText(listMovie.get(position).getTitulo());
+        viewHolder.tvDescripcion.setText(listMovie.get(position).getDescripcion());
+        Glide.with(context)
+                .load("https://image.tmdb.org/t/p/original" + listMovie.get(position).getPoster())
+                .into(viewHolder.ivPelicula);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
