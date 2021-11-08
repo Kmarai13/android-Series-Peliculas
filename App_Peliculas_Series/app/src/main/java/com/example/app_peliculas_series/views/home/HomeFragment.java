@@ -24,6 +24,7 @@ import com.example.app_peliculas_series.presenter.ViewFilmsPresenter;
 import com.example.app_peliculas_series.presenter.callbacks.AccessTokenListener;
 import com.example.app_peliculas_series.server.json.accesstoken.AccessTokentResponse;
 import com.example.app_peliculas_series.server.json.getlist.GetListResponse;
+import com.example.app_peliculas_series.server.json.getlist.ListFilms;
 import com.example.app_peliculas_series.server.json.requesttoken.RequestTokenResponse;
 import com.example.app_peliculas_series.utils.SingletonPrefs;
 
@@ -76,8 +77,10 @@ public class HomeFragment extends Fragment implements AccessTokenListener, Pelic
         return viewFilmsPresenter = new ViewFilmsPresenter(getContext(), this);
     }
 
-    private void  llenarPelculas(){
-        listMovie.add(new PeliculasBean(peliculasBean.getTitulo(),peliculasBean.getDescripcion(),peliculasBean.getPoster()));
+    private void llenarPelculas(PeliculasBean peliBean) {
+
+            listMovie.add(new PeliculasBean(peliBean.getTitulo(), peliBean.getDescripcion(), peliBean.getPoster()));
+
     }
 
     @Override
@@ -106,11 +109,13 @@ public class HomeFragment extends Fragment implements AccessTokenListener, Pelic
     public void onSuccessGetList(GetListResponse requestTokenResponse) {
         singletonPrefs.getListResponse = requestTokenResponse;
 
-        peliculasBean.setTitulo(requestTokenResponse.title);
-        peliculasBean.setDescripcion(requestTokenResponse.overview);
-        peliculasBean.setPoster(requestTokenResponse.posterPath);
+        for (ListFilms listFilms : requestTokenResponse.results) {
+            peliculasBean.setTitulo(listFilms.title);
+            peliculasBean.setDescripcion(listFilms.overview);
+            peliculasBean.setPoster(listFilms.posterPath);
+            llenarPelculas( peliculasBean);
+        }
 
-        llenarPelculas();
         PeliculasSeriesPersonalizadoAdapter adapter = new PeliculasSeriesPersonalizadoAdapter(listMovie);
         recyclerViewMovie.setAdapter(adapter);
 

@@ -24,7 +24,7 @@ public interface WebServicesDefinition {
     @GET("/4/account/{account_id}/lists")
     Call<GetListResponse> getList(@Path("account_id") String account_id);
 
-    @GET("/3/movie/550?api_key=099dd313f98a7c619d670245bb7ff65c")
+    @GET("/3/trending/movie/day?api_key=099dd313f98a7c619d670245bb7ff65c")
     Call<GetListResponse> getListMovie();
 
 
