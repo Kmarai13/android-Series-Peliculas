@@ -1,5 +1,6 @@
 package com.example.app_peliculas_series.database.entity;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -11,8 +12,9 @@ import retrofit2.http.GET;
 @Entity(tableName = "Movie")
 public class MovieEntity {
 
-
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
+    @NonNull
+    @ColumnInfo(name = "id")
     @Setter@Getter
     public int MovieId;
     @ColumnInfo(name = "title")

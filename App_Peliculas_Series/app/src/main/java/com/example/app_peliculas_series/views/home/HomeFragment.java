@@ -85,7 +85,6 @@ public class HomeFragment extends Fragment implements AccessTokenListener, Pelic
 //        recyclerViewMovie.setLayoutManager(new GridLayoutManager(getContext(), 2));
         viewFilmsPresenter.sendGetListMovie();
 
-        llenarPelculas(peliculasBean);
 
 
     }
@@ -133,11 +132,14 @@ public class HomeFragment extends Fragment implements AccessTokenListener, Pelic
         singletonPrefs.getListResponse = requestTokenResponse;
 
         for (ListFilms listFilms : requestTokenResponse.results) {
+            movieEntity.setMovieId(listFilms.id);
             movieEntity.setTitle(listFilms.title);
             movieEntity.setDescripcion(listFilms.overview);
             movieEntity.setImagen(listFilms.posterPath);
             repository.insertMovie(movieEntity);
         }
+
+        llenarPelculas(peliculasBean);
 
 
     }
