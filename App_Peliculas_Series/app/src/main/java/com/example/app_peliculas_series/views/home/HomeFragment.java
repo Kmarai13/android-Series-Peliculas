@@ -30,7 +30,6 @@ public class HomeFragment extends Fragment implements AccessTokenListener, Pelic
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
     private ViewFilmsPresenter viewFilmsPresenter;
-    protected Button btnAcept, btnContinuar;
     protected TextView textView;
     private SingletonPrefs singletonPrefs;
 
@@ -57,23 +56,9 @@ public class HomeFragment extends Fragment implements AccessTokenListener, Pelic
 
     private void initView() {
         textView = binding.tvList;
-        btnAcept = binding.btnAcept;
-        btnContinuar = binding.btnContinuar;
 
-        btnAcept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewFilmsPresenter.sendRequestToken();
-
-            }
-        });
-        btnContinuar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewFilmsPresenter.sendTokenAcccess();
-            }
-        });
-
+        viewFilmsPresenter.sendGetListMovie();
+        
     }
 
     protected ViewFilmsPresenter getPresenter() {

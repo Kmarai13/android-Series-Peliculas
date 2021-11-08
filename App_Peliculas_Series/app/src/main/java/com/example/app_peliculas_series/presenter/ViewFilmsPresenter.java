@@ -135,6 +135,33 @@ public class ViewFilmsPresenter {
         });
     }
 
+
+    public void sendGetListMovie() {
+        Call<GetListResponse> mFolioCall = WebServices.services().getListMovie();
+        mFolioCall.enqueue(new Callback<GetListResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<GetListResponse> call,
+                                   @NonNull Response<GetListResponse> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        accessTokenListener.onSuccessGetList(response.body());
+//            quitWaitDialog();
+                    } else {
+                        sendError(wsConsulted);
+                    }
+                } else
+                    sendError(wsConsulted);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<GetListResponse> call, @NonNull Throwable t) {
+                sendError(wsConsulted);
+            }
+        });
+    }
+
+
+
     private void sendError(String wsConsulted) {
 //        quitWaitDialog();
         accessTokenListener.onFailedService(ctx.getResources().getString(R.string.ws_error) + " " +
