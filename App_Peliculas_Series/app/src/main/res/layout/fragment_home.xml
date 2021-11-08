@@ -6,17 +6,46 @@
     android:layout_height="match_parent"
     tools:context=".views.home.HomeFragment">
 
-    <TextView
-        android:id="@+id/text_home"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/btnAcept"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
+        android:text="@string/iniciar_sesion"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023"
+        android:background="@color/colorPrimary"
+        android:layout_margin="35dp"
+        android:textColor="@color/white"/>
+
+
+    <Button
+        android:id="@+id/btnContinuar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="35dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/ver_lista_de_peliculas_y_series"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.184" />
+
+    <TextView
+        android:id="@+id/tv_list"
+        android:layout_width="173dp"
+        android:layout_height="182dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        tools:layout_editor_absoluteX="108dp"
+        tools:layout_editor_absoluteY="374dp"
+        tools:ignore="MissingConstraints"
+        android:visibility="gone"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
