@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">App_Peliculas_Series</string>
+    <string name="ws_error">Error en el servicio</string>
+    <string name="ws_error_two">Errror</string>
+    <string name="ws_wait">Espere un momento, por favor</string>
+    <string name="iniciar_sesion">Iniciar Sesion</string>
+    <string name="ver_lista_de_peliculas_y_series">Ver lista de peliculas y series</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">CineFilos</string>
+    <string name="nav_header_subtitle">Tus mejores peliculas solo en CineFilos</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Lista de Peliculas</string>
+    <string name="menu_gallery">Galeria</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="selecciona_una_imagen">Selecciona una imagen</string>
+    <string name="subir_imagen">SUBIR IMAGEN</string>
+    <string name="tomar_foto">TOMAR FOTO</string>
+    <string name="menu_camera">Camara</string>
+</resources>
