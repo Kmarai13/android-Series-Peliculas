@@ -17,5 +17,6 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="selecciona_una_imagen">Selecciona una imagen</string>
     <string name="subir_imagen">SUBIR IMAGEN</string>
+    <string name="tomar_foto">TOMAR FOTO</string>
     <string name="menu_camera">Camara</string>
 </resources>
