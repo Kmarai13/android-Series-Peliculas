@@ -85,7 +85,7 @@ public class HomeFragment extends Fragment implements AccessTokenListener, Pelic
 //        recyclerViewMovie.setLayoutManager(new GridLayoutManager(getContext(), 2));
         viewFilmsPresenter.sendGetListMovie();
 
-
+        llenarPelculas(peliculasBean);
 
     }
 
@@ -140,7 +140,6 @@ public class HomeFragment extends Fragment implements AccessTokenListener, Pelic
         }
 
         llenarPelculas(peliculasBean);
-
 
     }
 
