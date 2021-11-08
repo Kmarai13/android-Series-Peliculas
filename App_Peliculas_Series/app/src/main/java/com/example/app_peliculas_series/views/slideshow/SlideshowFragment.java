@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -100,6 +101,7 @@ public class SlideshowFragment extends Fragment {
                 HashMap<String, String> haahMap = new HashMap<>();
                 haahMap.put("link", String.valueOf(uri));
                 myRef.setValue(haahMap);
+                Toast.makeText(getContext(),"La imagen se subio a FIREBASE correctamente", Toast.LENGTH_LONG).show();
             }));
         }
     }
